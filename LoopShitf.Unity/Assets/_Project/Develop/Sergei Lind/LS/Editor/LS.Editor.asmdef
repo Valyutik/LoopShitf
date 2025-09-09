@@ -1,0 +1,22 @@
+{
+    "name": "LS.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc",
+        "GUID:15fc0a57446b3144c949da3e2b9737a9",
+        "GUID:f7531600accedfe4fa948a7df7d1c2f4"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "QNX"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
