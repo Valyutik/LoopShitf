@@ -4,6 +4,11 @@ namespace Sergei_Lind.LS.Runtime
 {
     public static class RuntimeConstants
     {
+        public static class Player
+        {
+            public const string Prefab = "Player";
+        }
+        
         public static class Configs
         {
             public const string ConfigFileName = "Config";

@@ -350,6 +350,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 729395726}
+  - component: {fileID: 729395727}
   m_Layer: 0
   m_Name: '[GAME]'
   m_TagString: Untagged
@@ -374,6 +375,18 @@ Transform:
   - {fileID: 619394802}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &729395727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 729395725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25c30dc8341144549556c1e24660a11c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &785501107
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,6 +579,7 @@ MonoBehaviour:
     TypeName: Sergei_Lind.LS.Runtime.Bootstrap.BootstrapScope
   autoRun: 1
   autoInjectGameObjects: []
+  rootTransform: {fileID: 729395727}
 --- !u!4 &1599036519
 Transform:
   m_ObjectHideFlags: 0
