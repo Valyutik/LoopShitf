@@ -1,4 +1,5 @@
 ﻿using Sergei_Lind.LS.Runtime.Utilities;
+using Sergei_Lind.LS.Runtime.Input;
 using Cysharp.Threading.Tasks;
 using VContainer.Unity;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
     {
         private readonly PlayerFactory _playerFactory;
         private readonly ConfigContainer _config;
+        private readonly IInput _input;
         private PlayerView _playerView;
         
         private readonly Vector2 _center;
@@ -19,16 +21,18 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
         private float _direction;
         private float _angleDeg;
 
-        public PlayerController(PlayerFactory playerFactory, ConfigContainer config)
+        public PlayerController(PlayerFactory playerFactory,
+            ConfigContainer config,
+            IInput input)
         {
             _playerFactory = playerFactory;
             _config = config;
+            _input = input;
 
             _center = _config.Core.Player.Center;
             _speed = _config.Core.Player.StartSpeed;
             _direction = _config.Core.Player.StartDirection;
             _radius = _config.Core.Player.Radius;
-            
         }
         
         public UniTask Load()
@@ -36,6 +40,8 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
             _playerView = _playerFactory.CreatePlayerView();
             _speed = _config.Core.Player.StartSpeed;
             _direction = _config.Core.Player.StartDirection;
+
+            _input.Tap += ToggleDirection;
             
             return UniTask.CompletedTask;
         }
@@ -52,7 +58,7 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
         
         private void RotateByDegrees()
         {
-            var deltaAngle = _speed * Time.deltaTime * _direction;
+            var deltaAngle = _speed * Time.fixedDeltaTime * _direction;
             _angleDeg += deltaAngle;
             if (_angleDeg >= 360f) _angleDeg -= 360f;
             if (_angleDeg < 0f) _angleDeg += 360f;
@@ -69,6 +75,8 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
 
         public void Dispose()
         {
+            _input.Tap -= ToggleDirection;
+            
             if (_playerView != null)
                 Object.Destroy(_playerView);
         }
