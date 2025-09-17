@@ -1,4 +1,5 @@
-﻿using Sergei_Lind.LS.Runtime.Core.Player;
+﻿using Sergei_Lind.LS.Runtime.Core.Player.Ring;
+using Sergei_Lind.LS.Runtime.Core.Player;
 using VContainer.Unity;
 using UnityEngine;
 using VContainer;
@@ -15,6 +16,7 @@ namespace Sergei_Lind.LS.Runtime.Core
             builder.RegisterComponent(rootTransform);
             builder.Register<PlayerFactory>(Lifetime.Singleton);
             builder.RegisterEntryPoint<PlayerController>().AsSelf();
+            builder.Register<RingFactory>(Lifetime.Singleton);
         }
     }
 }

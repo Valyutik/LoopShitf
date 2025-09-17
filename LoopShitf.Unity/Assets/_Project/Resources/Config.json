@@ -1,6 +1,11 @@
 {
   "Core": {
     "Player": {
+      "Ring": {
+        "SegmentsCount": 64,
+        "Offset": 0.75,
+        "Color": "#00c4b9"
+      },
       "Center": {
         "x": 0.0,
         "y": 0.0

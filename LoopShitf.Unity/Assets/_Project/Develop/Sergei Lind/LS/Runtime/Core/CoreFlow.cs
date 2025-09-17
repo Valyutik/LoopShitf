@@ -1,4 +1,5 @@
 ﻿using Sergei_Lind.LS.Runtime.Utilities.Logging;
+using Sergei_Lind.LS.Runtime.Core.Player.Ring;
 using Sergei_Lind.LS.Runtime.Core.Player;
 using Sergei_Lind.LS.Runtime.Utilities;
 using VContainer.Unity;
@@ -11,20 +12,24 @@ namespace Sergei_Lind.LS.Runtime.Core
         private readonly LoadingService _loadingService;
         private readonly PlayerFactory _playerFactory;
         private readonly PlayerController _playerController;
+        private readonly RingFactory _ringFactory;
 
         public CoreFlow(LoadingService loadingService,
             PlayerFactory playerFactory,
-            PlayerController playerController)
+            PlayerController playerController,
+            RingFactory ringFactory)
         {
             _loadingService = loadingService;
             _playerFactory = playerFactory;
             _playerController = playerController;
+            _ringFactory = ringFactory;
         }
         
         public async void Start()
         {
             await _loadingService.BeginLoading(_playerFactory);
             await _loadingService.BeginLoading(_playerController);
+            await _loadingService.BeginLoading(_ringFactory);
             Log.Core.D("CoreFlow.Start");
         }
 

@@ -1,10 +1,9 @@
-﻿using Unity.Plastic.Newtonsoft.Json;
+﻿using Sergei_Lind.LS.Runtime.Utilities;
 using Sergei_Lind.LS.Runtime;
 using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 using System.IO;
-using Sergei_Lind.LS.Runtime.Utilities;
 
 namespace Sergei_Lind.LS.Editor
 {
@@ -17,10 +16,13 @@ namespace Sergei_Lind.LS.Editor
             {
                 Core = new CoreConfig
                 {
-                    Player = new PlayerConfig()
+                    Player = new PlayerConfig
+                    {
+                        Ring = new RingConfig()
+                    }
                 }
             };
-
+            
             var settings = new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented,

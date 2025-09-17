@@ -31,11 +31,20 @@ namespace Sergei_Lind.LS.Runtime
     [Serializable]
     public class PlayerConfig
     {
+        public RingConfig Ring;
         public Vector2 Center = Vector2.zero;
         public float CircleSize = 0.5f;
         public float Radius = 1.3f;
         public float StartAngleDeg;
         public float StartSpeed = 90f;
         public float StartDirection = 1f;
+    }
+
+    [Serializable]
+    public class RingConfig
+    {
+        public int SegmentsCount = 64;
+        public float Offset = 0.7f;
+        public string Color = "#00c4b9";
     }
 }
