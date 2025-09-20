@@ -13,13 +13,13 @@
       "CircleSize": 0.5,
       "Radius": 1.3,
       "StartAngleDeg": 0.0,
-      "StartSpeed": 90.0,
+      "StartSpeed": 180.0,
       "StartDirection": 1.0
     },
     "Enemy": {
       "SpawnInterval": 2.0,
       "SpawnOffset": 1.0,
-      "Speed": 1.5,
+      "Speed": 2.0,
       "LifeTime": 10.0,
       "InitialCount": 5
     }

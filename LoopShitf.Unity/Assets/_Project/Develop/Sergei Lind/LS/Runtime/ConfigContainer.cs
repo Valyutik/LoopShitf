@@ -37,7 +37,7 @@ namespace Sergei_Lind.LS.Runtime
         public float CircleSize = 0.5f;
         public float Radius = 1.3f;
         public float StartAngleDeg;
-        public float StartSpeed = 90f;
+        public float StartSpeed = 180f;
         public float StartDirection = 1f;
     }
 
@@ -54,7 +54,7 @@ namespace Sergei_Lind.LS.Runtime
     {
         public float SpawnInterval = 2f;
         public float SpawnOffset = 1f;
-        public float Speed = 1.5f;
+        public float Speed = 2f;
         public float LifeTime = 10f;
         public int InitialCount = 5;
     }
