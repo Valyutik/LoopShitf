@@ -10,11 +10,13 @@ namespace Sergei_Lind.LS.Runtime.Core
     public sealed class CoreScope : LifetimeScope
     {
         [SerializeField] private RootTransform rootTransform;
+        [SerializeField] private EnemyRootTransform enemyRootTransform;
         
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterEntryPoint<CoreFlow>();
             builder.RegisterComponent(rootTransform);
+            builder.RegisterComponent(enemyRootTransform);
             
             builder.Register<PlayerFactory>(Lifetime.Singleton);
             builder.RegisterEntryPoint<PlayerController>().AsSelf();

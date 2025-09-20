@@ -6,11 +6,12 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
 {
     public sealed class EnemyFactory : ILoadUnit
     {
-        private readonly RootTransform _root;
+        private readonly EnemyRootTransform _root;
         private readonly ConfigContainer _config;
+        private EnemyPool  _pool;
         private EnemyView  _enemyPrefab;
 
-        public EnemyFactory(RootTransform root, ConfigContainer config)
+        public EnemyFactory(EnemyRootTransform root, ConfigContainer config)
         {
             _root = root;
             _config = config;
@@ -19,17 +20,21 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
         public UniTask Load()
         {
             _enemyPrefab = AssetService.R.Load<EnemyView>(RuntimeConstants.Enemy.Prefab);
+            _pool = new EnemyPool(_enemyPrefab, _root.transform, _config.Core.Enemy.InitialCount);
             return UniTask.CompletedTask;
         }
 
         public EnemyView Create(Vector2 position)
         {
-            var enemy = Object.Instantiate(_enemyPrefab,
-                position,
-                Quaternion.identity,
-                _root.transform);
-            enemy.Initialize(new Vector2(_config.Core.Enemy.Speed, 0));
+            var enemy = _pool.Get(position);
+            enemy.Initialize(_config.Core.Enemy.LifeTime, _config.Core.Enemy.Speed);
             return enemy;
+        }
+
+        public void Destroy(EnemyView enemy)
+        {
+            enemy.SetVelocity(0);
+            _pool.Return(enemy);
         }
     }
 }

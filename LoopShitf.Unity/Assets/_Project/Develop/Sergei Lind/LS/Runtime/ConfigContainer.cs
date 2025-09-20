@@ -52,8 +52,10 @@ namespace Sergei_Lind.LS.Runtime
     [Serializable]
     public class EnemyConfig
     {
-        public float SpawnInterval = 0.5f;
+        public float SpawnInterval = 2f;
         public float SpawnOffset = 1f;
         public float Speed = 1.5f;
+        public float LifeTime = 10f;
+        public int InitialCount = 5;
     }
 }

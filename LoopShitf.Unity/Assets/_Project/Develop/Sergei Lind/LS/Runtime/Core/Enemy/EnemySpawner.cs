@@ -47,9 +47,10 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
             
             var position = new Vector2(spawnX, spawnY);
             var enemy = _enemyFactory.Create(position);
+            enemy.OnLifeTimeEndedEvent += OnEnemyLifetimeEnded;
             _activeEnemies.Add(enemy);
         }
-        
+
         public void Dispose()
         {
             foreach (var enemy in _activeEnemies)
@@ -57,6 +58,13 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
                 Object.Destroy(enemy);
             }
             _activeEnemies.Clear();
+        }
+        
+        private void OnEnemyLifetimeEnded(EnemyView enemy)
+        {
+            _enemyFactory.Destroy(enemy);
+            _activeEnemies.Remove(enemy);
+            enemy.OnLifeTimeEndedEvent -= OnEnemyLifetimeEnded;
         }
     }
 }

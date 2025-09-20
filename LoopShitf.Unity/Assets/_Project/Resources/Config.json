@@ -17,9 +17,11 @@
       "StartDirection": 1.0
     },
     "Enemy": {
-      "SpawnInterval": 2,
-      "SpawnOffset": 5,
-      "Speed": 1.5
+      "SpawnInterval": 2.0,
+      "SpawnOffset": 1.0,
+      "Speed": 1.5,
+      "LifeTime": 10.0,
+      "InitialCount": 5
     }
   }
 }
