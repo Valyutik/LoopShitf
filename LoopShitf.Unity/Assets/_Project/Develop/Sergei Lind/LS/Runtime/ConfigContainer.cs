@@ -26,6 +26,7 @@ namespace Sergei_Lind.LS.Runtime
     public class CoreConfig
     {
         public PlayerConfig Player;
+        public EnemyConfig Enemy;
     }
 
     [Serializable]
@@ -46,5 +47,13 @@ namespace Sergei_Lind.LS.Runtime
         public int SegmentsCount = 64;
         public float Offset = 0.7f;
         public string Color = "#00c4b9";
+    }
+
+    [Serializable]
+    public class EnemyConfig
+    {
+        public float SpawnInterval = 0.5f;
+        public float SpawnOffset = 1f;
+        public float Speed = 1.5f;
     }
 }

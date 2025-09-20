@@ -15,6 +15,11 @@
       "StartAngleDeg": 0.0,
       "StartSpeed": 90.0,
       "StartDirection": 1.0
+    },
+    "Enemy": {
+      "SpawnInterval": 2,
+      "SpawnOffset": 5,
+      "Speed": 1.5
     }
   }
 }

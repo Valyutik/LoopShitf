@@ -19,7 +19,8 @@ namespace Sergei_Lind.LS.Editor
                     Player = new PlayerConfig
                     {
                         Ring = new RingConfig()
-                    }
+                    },
+                    Enemy = new EnemyConfig()
                 }
             };
             

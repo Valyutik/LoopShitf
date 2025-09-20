@@ -9,6 +9,11 @@ namespace Sergei_Lind.LS.Runtime
             public const string Prefab = "Player";
         }
         
+        public static class Enemy
+        {
+            public const string Prefab = "Enemy";
+        }
+        
         public static class Configs
         {
             public const string ConfigFileName = "Config";
