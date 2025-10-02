@@ -48,6 +48,7 @@ namespace Sergei_Lind.LS.Runtime.Core
 
         public void Dispose()
         {
+            _loadingService.Disposable.Dispose();
             Log.Core.D("CoreFlow.Dispose()");
         }
     }
