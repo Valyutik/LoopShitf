@@ -42,7 +42,9 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
 
         public void Return(EnemyView enemy)
         {
+            if (enemy == null) return;
             enemy.gameObject.SetActive(false);
+            enemy.SetVelocity(0);
             _pool.Enqueue(enemy);
         }
         

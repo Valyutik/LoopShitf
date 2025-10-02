@@ -33,7 +33,6 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
 
         public void Destroy(EnemyView enemy)
         {
-            enemy.SetVelocity(0);
             _pool.Return(enemy);
         }
     }

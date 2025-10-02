@@ -25,6 +25,11 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
             SetVelocity(speed);
         }
 
+        private void OnEnable()
+        {
+            _lifeTimer = 0;
+        }
+
         public void SetVelocity(float velocity)
         {
             _rigidbody2D.linearVelocityX = velocity;
@@ -32,10 +37,10 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
 
         private void Update()
         {
+            if (!gameObject.activeSelf) return;
             _lifeTimer += Time.deltaTime;
             if (!(_lifeTimer >= _lifeTimerMax)) return;
             OnLifeTimeEndedEvent?.Invoke(this);
-            _lifeTimer = 0;
         }
     }
 }
