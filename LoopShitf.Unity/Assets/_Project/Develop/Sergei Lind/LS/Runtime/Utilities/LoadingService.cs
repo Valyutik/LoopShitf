@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using System.Diagnostics;
 using System.Threading;
 using System;
+using JetBrains.Annotations;
 using UniRx;
 
 namespace Sergei_Lind.LS.Runtime.Utilities
@@ -21,11 +22,13 @@ namespace Sergei_Lind.LS.Runtime.Utilities
 
     public interface IDisposableLoadUnit<in T> : ILoadUnit<T>, IDisposable { }
 
+    [UsedImplicitly]
     public sealed class LoadingService
     {
         private readonly Stopwatch _watch = new();
         
-        public readonly CompositeDisposable Disposable = new();
+        // ReSharper disable once CollectionNeverQueried.Global
+        public readonly CompositeDisposable disposable = new();
 
 
         private void OnLoadingBegin(object unit)
@@ -73,7 +76,7 @@ namespace Sergei_Lind.LS.Runtime.Utilities
 
         public async UniTask BeginLoading(IDisposableLoadUnit unit, bool skipExceptionThrow = false)
         {
-            Disposable.Add(unit);
+            disposable.Add(unit);
             await BeginLoading((ILoadUnit)unit, skipExceptionThrow);
         }
 
@@ -99,7 +102,7 @@ namespace Sergei_Lind.LS.Runtime.Utilities
 
         public async UniTask BeginLoading<T>(IDisposableLoadUnit<T> unit, T param, bool skipExceptionThrow = false)
         {
-            Disposable.Add(unit);
+            disposable.Add(unit);
             await BeginLoading((ILoadUnit<T>)unit, param, skipExceptionThrow);
         }
 

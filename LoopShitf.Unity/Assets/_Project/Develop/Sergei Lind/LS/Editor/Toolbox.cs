@@ -1,8 +1,10 @@
-﻿using UnityEditor;
+﻿using JetBrains.Annotations;
+using UnityEditor;
 using UnityEditor.SceneManagement;
 
 namespace Sergei_Lind.LS.Editor
 {
+    [UsedImplicitly]
     public sealed class ToolBox
     {
         [MenuItem("Sergei Lind/Scenes/Bootstrap &1", priority = 202)]

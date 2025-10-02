@@ -1,9 +1,11 @@
 ﻿using Cysharp.Threading.Tasks;
+using JetBrains.Annotations;
 using Sergei_Lind.LS.Runtime.Utilities;
 using UnityEngine;
 
 namespace Sergei_Lind.LS.Runtime.Core.Player.Ring
 {
+    [UsedImplicitly]
     public sealed class RingFactory : ILoadUnit
     {
         private readonly ConfigContainer _config;

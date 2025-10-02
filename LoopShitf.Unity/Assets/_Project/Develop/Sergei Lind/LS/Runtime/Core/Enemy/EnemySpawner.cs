@@ -1,11 +1,13 @@
 ﻿using Sergei_Lind.LS.Runtime.Utilities;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using JetBrains.Annotations;
 using VContainer.Unity;
 using UnityEngine;
 
 namespace Sergei_Lind.LS.Runtime.Core.Enemy
 {
+    [UsedImplicitly]
     public sealed class EnemySpawner : IDisposableLoadUnit, ITickable
     {
         private readonly EnemyFactory _enemyFactory;

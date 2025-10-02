@@ -1,9 +1,11 @@
 ﻿using Sergei_Lind.LS.Runtime.Utilities;
 using Object = UnityEngine.Object;
 using Cysharp.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Sergei_Lind.LS.Runtime.Core.Player
 {
+    [UsedImplicitly]
     public sealed class PlayerFactory : ILoadUnit
     {
         private readonly ConfigContainer _config;

@@ -1,9 +1,11 @@
 ﻿using Sergei_Lind.LS.Runtime.Utilities;
 using Cysharp.Threading.Tasks;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Sergei_Lind.LS.Runtime.Core.Enemy
 {
+    [UsedImplicitly]
     public sealed class EnemyFactory : ILoadUnit
     {
         private readonly EnemyRootTransform _root;

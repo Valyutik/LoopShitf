@@ -5,10 +5,12 @@ using Cysharp.Threading.Tasks;
 using VContainer.Unity;
 using UnityEngine;
 using System;
+using JetBrains.Annotations;
 using Object = UnityEngine.Object;
 
 namespace Sergei_Lind.LS.Runtime.Core.Player
 {
+    [UsedImplicitly]
     public sealed class PlayerController : IDisposableLoadUnit, IFixedTickable
     {
         private readonly PlayerFactory _playerFactory;

@@ -4,9 +4,11 @@ using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 using System.IO;
+using JetBrains.Annotations;
 
 namespace Sergei_Lind.LS.Editor
 {
+    [UsedImplicitly]
     public sealed class ConfigGenerator
     {
         [MenuItem("Sergei Lind/Generate Config")]

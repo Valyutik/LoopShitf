@@ -1,4 +1,5 @@
-﻿using Sergei_Lind.LS.Runtime.Utilities.Logging;
+﻿using JetBrains.Annotations;
+using Sergei_Lind.LS.Runtime.Utilities.Logging;
 using Sergei_Lind.LS.Runtime.Utilities;
 using Sergei_Lind.LS.Runtime.Input;
 using UnityEngine.SceneManagement;
@@ -6,6 +7,7 @@ using VContainer.Unity;
 
 namespace Sergei_Lind.LS.Runtime.Bootstrap
 {
+    [UsedImplicitly]
     public class BootstrapFlow : IStartable
     {
         private readonly LoadingService _loadingService;

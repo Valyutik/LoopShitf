@@ -5,9 +5,11 @@ using Sergei_Lind.LS.Runtime.Core.Enemy;
 using Sergei_Lind.LS.Runtime.Utilities;
 using VContainer.Unity;
 using System;
+using JetBrains.Annotations;
 
 namespace Sergei_Lind.LS.Runtime.Core
 {
+    [UsedImplicitly]
     public sealed class CoreFlow : IStartable, IDisposable
     {
         private readonly LoadingService _loadingService;
@@ -48,7 +50,7 @@ namespace Sergei_Lind.LS.Runtime.Core
 
         public void Dispose()
         {
-            _loadingService.Disposable.Dispose();
+            _loadingService.disposable.Dispose();
             Log.Core.D("CoreFlow.Dispose()");
         }
     }
