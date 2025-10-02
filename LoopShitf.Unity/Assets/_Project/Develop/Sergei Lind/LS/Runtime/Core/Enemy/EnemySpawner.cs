@@ -55,7 +55,7 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
         {
             foreach (var enemy in _activeEnemies)
             {
-                Object.Destroy(enemy);
+                enemy.OnLifeTimeEndedEvent -= OnEnemyLifetimeEnded;
                 _enemyFactory.Destroy(enemy);
             }
             _activeEnemies.Clear();

@@ -39,6 +39,7 @@ namespace Sergei_Lind.LS.Runtime
         public float StartAngleDeg;
         public float StartSpeed = 180f;
         public float StartDirection = 1f;
+        public int Health = 1;
     }
 
     [Serializable]
@@ -57,5 +58,6 @@ namespace Sergei_Lind.LS.Runtime
         public float Speed = 2f;
         public float LifeTime = 10f;
         public int InitialCount = 5;
+        public int Damage = 1;
     }
 }

@@ -1,4 +1,5 @@
-﻿using Sergei_Lind.LS.Runtime.Utilities;
+﻿using Sergei_Lind.LS.Runtime.Utilities.Logging;
+using Sergei_Lind.LS.Runtime.Utilities;
 using Sergei_Lind.LS.Runtime.Input;
 using Cysharp.Threading.Tasks;
 using VContainer.Unity;
@@ -13,6 +14,7 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
         private readonly PlayerFactory _playerFactory;
         private readonly ConfigContainer _config;
         private readonly IInput _input;
+        private readonly Health _health;
         private PlayerView _playerView;
         
         private readonly Vector2 _center;
@@ -28,6 +30,7 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
             _playerFactory = playerFactory;
             _config = config;
             _input = input;
+            _health = new Health(_config.Core.Player.Health);
 
             _center = _config.Core.Player.Center;
             _speed = _config.Core.Player.StartSpeed;
@@ -41,7 +44,9 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
             _speed = _config.Core.Player.StartSpeed;
             _direction = _config.Core.Player.StartDirection;
 
-            _input.Tap += ToggleDirection;
+            _input.Tap += OnToggleDirection;
+            _health.OnDead += OnPlayerDead;
+            _playerView.OnEnemyTriggerEnter += OnEnemyTriggerEnter;
             
             return UniTask.CompletedTask;
         }
@@ -51,9 +56,14 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
             RotateByDegrees();
         }
         
-        private void ToggleDirection()
+        public void Dispose()
         {
-            _direction *= -1f;
+            _input.Tap -= OnToggleDirection;
+            _health.OnDead -= OnPlayerDead;
+            _playerView.OnEnemyTriggerEnter -= OnEnemyTriggerEnter;
+            
+            if (_playerView != null)
+                Object.Destroy(_playerView);
         }
         
         private void RotateByDegrees()
@@ -72,13 +82,20 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
             
             _playerView.MoveTo(targetPos);
         }
-
-        public void Dispose()
+        
+        private void OnToggleDirection()
         {
-            _input.Tap -= ToggleDirection;
-            
-            if (_playerView != null)
-                Object.Destroy(_playerView);
+            _direction *= -1f;
+        }
+
+        private void OnPlayerDead()
+        {
+            Log.Core.D("Player Dead");
+        }
+        
+        private void OnEnemyTriggerEnter()
+        {
+            _health.TakeDamage(_config.Core.Enemy.Damage);
         }
     }
 }
