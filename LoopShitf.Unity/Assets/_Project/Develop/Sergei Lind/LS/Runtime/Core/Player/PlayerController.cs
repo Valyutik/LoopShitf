@@ -2,10 +2,9 @@
 using Sergei_Lind.LS.Runtime.Utilities;
 using Sergei_Lind.LS.Runtime.Input;
 using Cysharp.Threading.Tasks;
+using JetBrains.Annotations;
 using VContainer.Unity;
 using UnityEngine;
-using System;
-using JetBrains.Annotations;
 using Object = UnityEngine.Object;
 
 namespace Sergei_Lind.LS.Runtime.Core.Player
@@ -18,28 +17,25 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
         private readonly ConfigContainer _configContainer;
         private readonly Health _health;
         private readonly IInput _input;
-        private readonly Health _health;
         private PlayerView _playerView;
         
-        private readonly Vector2 _center;
-        private readonly float _radius;
-        private float _speed;
-        private float _direction;
-        private float _angleDeg;
+        private bool _canMove = true;
 
-        public PlayerController(PlayerFactory playerFactory,
+        public PlayerController(PlayerViewFactory playerViewFactory,
             ConfigContainer config,
             IInput input)
         {
             _playerViewFactory = playerViewFactory;
+            _configContainer = config;
             var playerConfig = config.Core.Player;
             _input = input;
-            _health = new Health(_config.Core.Player.Health);
-
-            _center = _config.Core.Player.Center;
-            _speed = _config.Core.Player.StartSpeed;
-            _direction = _config.Core.Player.StartDirection;
-            _radius = _config.Core.Player.Radius;
+            
+            _health = new Health(playerConfig.Health);
+            _playerMovement = new PlayerOrbitMovement(playerConfig.Center,
+                playerConfig.Radius,
+                playerConfig.StartSpeed,
+                playerConfig.StartDirection,
+                playerConfig.StartAngleDeg);
         }
         
         public UniTask Load()
@@ -55,9 +51,9 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
 
         public void FixedTick()
         {
-            RotateByDegrees();
+            UpdatePosition();
         }
-        
+
         public void Dispose()
         {
             _input.OnTap -= HandleTap;
@@ -68,26 +64,19 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
                 Object.Destroy(_playerView);
         }
         
-        private void RotateByDegrees()
-        {
-            var deltaAngle = _speed * Time.fixedDeltaTime * _direction;
-            _angleDeg += deltaAngle;
-            if (_angleDeg >= 360f) _angleDeg -= 360f;
-            if (_angleDeg < 0f) _angleDeg += 360f;
-            MoveToAngle(_angleDeg);
-        }
+        public void EnableMovement() => _canMove = true;
+        public void DisableMovement() => _canMove = false;
         
-        private void MoveToAngle(float angleDeg)
+        private void UpdatePosition()
         {
-            var rad = angleDeg * Mathf.Deg2Rad;
-            var targetPos = new Vector2(MathF.Cos(rad), MathF.Sin(rad)) * _radius + _center;
-            
-            _playerView.MoveTo(targetPos);
+            if (!_canMove) return;
+            var position = _playerMovement.Tick(Time.fixedDeltaTime);
+            _playerView.MoveTo(position);
         }
         
         private void HandleTap()
         {
-            _direction *= -1f;
+            _playerMovement.ToggleDirection();
         }
 
         private void HandlePlayerDead()
@@ -97,7 +86,7 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
         
         private void HandleEnemyTriggerEnter()
         {
-            _health.TakeDamage(_config.Core.Enemy.Damage);
+            _health.TakeDamage(_configContainer.Core.Enemy.Damage);
         }
     }
 }
