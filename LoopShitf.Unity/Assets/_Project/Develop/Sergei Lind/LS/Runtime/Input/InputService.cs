@@ -10,7 +10,7 @@ namespace Sergei_Lind.LS.Runtime.Input
     public sealed class InputService : IDisposableLoadUnit, IInput
     {
         private InputSystem_Actions _inputActions;
-        public event Action Tap;
+        public event Action OnTap;
         
         public UniTask Load()
         {
@@ -28,7 +28,7 @@ namespace Sergei_Lind.LS.Runtime.Input
         
         private void OnTapPerformed(InputAction.CallbackContext ctx)
         {
-            Tap?.Invoke();
+            OnTap?.Invoke();
         }
     }
 }

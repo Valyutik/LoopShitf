@@ -14,7 +14,7 @@ namespace Sergei_Lind.LS.Runtime.Core
     {
         private readonly LoadingService _loadingService;
         
-        private readonly PlayerFactory _playerFactory;
+        private readonly PlayerViewFactory _playerViewFactory;
         private readonly PlayerController _playerController;
         private readonly RingFactory _ringFactory;
 
@@ -22,14 +22,14 @@ namespace Sergei_Lind.LS.Runtime.Core
         private readonly EnemySpawner _enemySpawner;
 
         public CoreFlow(LoadingService loadingService,
-            PlayerFactory playerFactory,
+            PlayerViewFactory playerViewFactory,
             PlayerController playerController,
             RingFactory ringFactory,
             EnemyFactory enemyFactory,
             EnemySpawner enemySpawner)
         {
             _loadingService = loadingService;
-            _playerFactory = playerFactory;
+            _playerViewFactory = playerViewFactory;
             _playerController = playerController;
             _ringFactory = ringFactory;
             _enemyFactory = enemyFactory;
@@ -38,7 +38,7 @@ namespace Sergei_Lind.LS.Runtime.Core
         
         public async void Start()
         {
-            await _loadingService.BeginLoading(_playerFactory);
+            await _loadingService.BeginLoading(_playerViewFactory);
             await _loadingService.BeginLoading(_playerController);
             await _loadingService.BeginLoading(_ringFactory);
 

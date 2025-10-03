@@ -13,8 +13,10 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
     [UsedImplicitly]
     public sealed class PlayerController : IDisposableLoadUnit, IFixedTickable
     {
-        private readonly PlayerFactory _playerFactory;
-        private readonly ConfigContainer _config;
+        private readonly PlayerViewFactory _playerViewFactory;
+        private readonly PlayerOrbitMovement _playerMovement;
+        private readonly ConfigContainer _configContainer;
+        private readonly Health _health;
         private readonly IInput _input;
         private readonly Health _health;
         private PlayerView _playerView;
@@ -29,8 +31,8 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
             ConfigContainer config,
             IInput input)
         {
-            _playerFactory = playerFactory;
-            _config = config;
+            _playerViewFactory = playerViewFactory;
+            var playerConfig = config.Core.Player;
             _input = input;
             _health = new Health(_config.Core.Player.Health);
 
@@ -42,13 +44,11 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
         
         public UniTask Load()
         {
-            _playerView = _playerFactory.CreatePlayerView();
-            _speed = _config.Core.Player.StartSpeed;
-            _direction = _config.Core.Player.StartDirection;
+            _playerView = _playerViewFactory.CreatePlayerView();
 
-            _input.Tap += OnToggleDirection;
-            _health.OnDead += OnPlayerDead;
-            _playerView.OnEnemyTriggerEnter += OnEnemyTriggerEnter;
+            _input.OnTap += HandleTap;
+            _health.OnDead += HandlePlayerDead;
+            _playerView.OnEnemyTriggerEnter += HandleEnemyTriggerEnter;
             
             return UniTask.CompletedTask;
         }
@@ -60,9 +60,9 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
         
         public void Dispose()
         {
-            _input.Tap -= OnToggleDirection;
-            _health.OnDead -= OnPlayerDead;
-            _playerView.OnEnemyTriggerEnter -= OnEnemyTriggerEnter;
+            _input.OnTap -= HandleTap;
+            _health.OnDead -= HandlePlayerDead;
+            _playerView.OnEnemyTriggerEnter -= HandleEnemyTriggerEnter;
             
             if (_playerView != null)
                 Object.Destroy(_playerView);
@@ -85,17 +85,17 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
             _playerView.MoveTo(targetPos);
         }
         
-        private void OnToggleDirection()
+        private void HandleTap()
         {
             _direction *= -1f;
         }
 
-        private void OnPlayerDead()
+        private void HandlePlayerDead()
         {
             Log.Core.D("Player Dead");
         }
         
-        private void OnEnemyTriggerEnter()
+        private void HandleEnemyTriggerEnter()
         {
             _health.TakeDamage(_config.Core.Enemy.Damage);
         }

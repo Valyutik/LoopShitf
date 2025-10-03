@@ -18,7 +18,7 @@ namespace Sergei_Lind.LS.Runtime.Core
             builder.RegisterComponent(rootTransform);
             builder.RegisterComponent(enemyRootTransform);
             
-            builder.Register<PlayerFactory>(Lifetime.Singleton);
+            builder.Register<PlayerViewFactory>(Lifetime.Singleton);
             builder.RegisterEntryPoint<PlayerController>().AsSelf();
             builder.Register<RingFactory>(Lifetime.Singleton);
 
