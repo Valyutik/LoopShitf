@@ -15,6 +15,7 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
         private readonly List<EnemyView> _activeEnemies = new();
 
         private float _timer;
+        private bool _isActive;
         
         public EnemySpawner(EnemyFactory enemyFactory, ConfigContainer config)
         {
@@ -30,11 +31,36 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
 
         public void Tick()
         {
+            if (!_isActive) return;
             _timer += Time.deltaTime;
 
             if (!(_timer >= _config.Core.Enemy.SpawnInterval)) return;
             _timer = 0;
             SpawnEnemy();
+        }
+        
+        public void Dispose()
+        {
+            foreach (var enemy in _activeEnemies)
+            {
+                enemy.OnLifeTimeEndedEvent -= OnEnemyLifetimeEnded;
+                _enemyFactory.Destroy(enemy);
+            }
+            _activeEnemies.Clear();
+        }
+        
+        public void Start()
+        {
+            _isActive = true;
+            foreach (var enemy in _activeEnemies)
+                enemy.Resume();
+        }
+
+        public void Stop()
+        {
+            _isActive = false;
+            foreach (var enemy in _activeEnemies)
+                enemy.Stop();
         }
 
         private void SpawnEnemy()
@@ -51,16 +77,6 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
             var enemy = _enemyFactory.Create(position);
             enemy.OnLifeTimeEndedEvent += OnEnemyLifetimeEnded;
             _activeEnemies.Add(enemy);
-        }
-
-        public void Dispose()
-        {
-            foreach (var enemy in _activeEnemies)
-            {
-                enemy.OnLifeTimeEndedEvent -= OnEnemyLifetimeEnded;
-                _enemyFactory.Destroy(enemy);
-            }
-            _activeEnemies.Clear();
         }
         
         private void OnEnemyLifetimeEnded(EnemyView enemy)

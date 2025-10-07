@@ -11,6 +11,8 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
         private Rigidbody2D _rigidbody2D;
         private float _lifeTimer;
         private float _lifeTimerMax;
+        private bool _isActive = true;
+        private float _cachedVelocity;
 
         public void Awake()
         {
@@ -19,28 +21,47 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
             _rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
 
-        public void Initialize(float maxLifeTime, float speed)
+        public void Initialize(float maxLifeTime, float velocity)
         {
             _lifeTimerMax = maxLifeTime;
-            SetVelocity(speed);
+            _cachedVelocity = velocity;
+            SetVelocity(velocity);
         }
 
         private void OnEnable()
         {
             _lifeTimer = 0;
-        }
-
-        public void SetVelocity(float velocity)
-        {
-            _rigidbody2D.linearVelocityX = velocity;
+            _isActive = true;
         }
 
         private void Update()
         {
-            if (!gameObject.activeSelf) return;
+            if (!_isActive) return;
+            
             _lifeTimer += Time.deltaTime;
             if (!(_lifeTimer >= _lifeTimerMax)) return;
             OnLifeTimeEndedEvent?.Invoke(this);
+        }
+        
+        public void SetVelocity(float velocity)
+        {
+            _cachedVelocity = velocity;
+            if (_isActive)
+                _rigidbody2D.linearVelocityX = velocity;
+            else
+                _rigidbody2D.linearVelocityX = 0;
+        }
+        
+        public void Stop()
+        {
+            _isActive = false;
+            _rigidbody2D.linearVelocity = Vector2.zero;
+        }
+
+        public void Resume()
+        {
+            _isActive = true;
+            _rigidbody2D.linearVelocityX = _cachedVelocity;
         }
     }
 }

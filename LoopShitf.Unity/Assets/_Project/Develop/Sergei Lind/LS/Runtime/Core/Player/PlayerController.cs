@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using VContainer.Unity;
 using UnityEngine;
+using System;
 using Object = UnityEngine.Object;
 
 namespace Sergei_Lind.LS.Runtime.Core.Player
@@ -12,6 +13,8 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
     [UsedImplicitly]
     public sealed class PlayerController : IDisposableLoadUnit, IFixedTickable
     {
+        public event Action OnPlayerDead;
+        
         private readonly PlayerViewFactory _playerViewFactory;
         private readonly PlayerOrbitMovement _playerMovement;
         private readonly ConfigContainer _configContainer;
@@ -19,7 +22,7 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
         private readonly IInput _input;
         private PlayerView _playerView;
         
-        private bool _canMove = true;
+        private bool _canMove;
 
         public PlayerController(PlayerViewFactory playerViewFactory,
             ConfigContainer config,
@@ -37,7 +40,7 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
                 playerConfig.StartDirection,
                 playerConfig.StartAngleDeg);
         }
-        
+
         public UniTask Load()
         {
             _playerView = _playerViewFactory.CreatePlayerView();
@@ -64,6 +67,18 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
                 Object.Destroy(_playerView);
         }
         
+        public void Start()
+        {
+            EnableMovement();
+            _playerView.gameObject.SetActive(true);
+        }
+
+        public void Stop()
+        {
+            DisableMovement();
+            _playerView.gameObject.SetActive(false);
+        }
+        
         public void EnableMovement() => _canMove = true;
         public void DisableMovement() => _canMove = false;
         
@@ -82,6 +97,7 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
         private void HandlePlayerDead()
         {
             Log.Core.D("Player Dead");
+            OnPlayerDead?.Invoke();
         }
         
         private void HandleEnemyTriggerEnter()

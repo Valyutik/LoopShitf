@@ -3,9 +3,9 @@ using Sergei_Lind.LS.Runtime.Core.Player.Ring;
 using Sergei_Lind.LS.Runtime.Core.Player;
 using Sergei_Lind.LS.Runtime.Core.Enemy;
 using Sergei_Lind.LS.Runtime.Utilities;
+using JetBrains.Annotations;
 using VContainer.Unity;
 using System;
-using JetBrains.Annotations;
 
 namespace Sergei_Lind.LS.Runtime.Core
 {
@@ -20,13 +20,16 @@ namespace Sergei_Lind.LS.Runtime.Core
 
         private readonly EnemyFactory _enemyFactory;
         private readonly EnemySpawner _enemySpawner;
+        
+        private readonly GameSession _gameSession;
 
         public CoreFlow(LoadingService loadingService,
             PlayerViewFactory playerViewFactory,
             PlayerController playerController,
             RingFactory ringFactory,
             EnemyFactory enemyFactory,
-            EnemySpawner enemySpawner)
+            EnemySpawner enemySpawner,
+            GameSession gameSession)
         {
             _loadingService = loadingService;
             _playerViewFactory = playerViewFactory;
@@ -34,6 +37,7 @@ namespace Sergei_Lind.LS.Runtime.Core
             _ringFactory = ringFactory;
             _enemyFactory = enemyFactory;
             _enemySpawner = enemySpawner;
+            _gameSession = gameSession;
         }
         
         public async void Start()
@@ -44,6 +48,10 @@ namespace Sergei_Lind.LS.Runtime.Core
 
             await _loadingService.BeginLoading(_enemyFactory);
             await _loadingService.BeginLoading(_enemySpawner);
+            
+            await _loadingService.BeginLoading(_gameSession);
+            
+            _gameSession.Start();
             
             Log.Core.D("CoreFlow.Start");
         }

@@ -24,6 +24,8 @@ namespace Sergei_Lind.LS.Runtime.Core
 
             builder.Register<EnemyFactory>(Lifetime.Singleton);
             builder.RegisterEntryPoint<EnemySpawner>().AsSelf();
+            
+            builder.Register<GameSession>(Lifetime.Singleton);
         }
     }
 }

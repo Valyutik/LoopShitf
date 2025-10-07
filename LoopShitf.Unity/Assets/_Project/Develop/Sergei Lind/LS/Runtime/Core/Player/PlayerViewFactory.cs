@@ -27,6 +27,7 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
         public PlayerView CreatePlayerView()
         {
             var playerView = Object.Instantiate(_playerView, _rootTransform.transform);
+            playerView.gameObject.SetActive(false);
             playerView.Initialize(_config.Core.Player.CircleSize);
             return playerView;
         }
