@@ -6,7 +6,7 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
     [RequireComponent(typeof(Rigidbody2D))]
     public sealed class EnemyView : MonoBehaviour
     {
-        public event Action<EnemyView> OnLifeTimeEndedEvent;
+        public event Action<EnemyView> OnLifeTimeEnded;
         
         private Rigidbody2D _rigidbody2D;
         private float _lifeTimer;
@@ -40,7 +40,7 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
             
             _lifeTimer += Time.deltaTime;
             if (!(_lifeTimer >= _lifeTimerMax)) return;
-            OnLifeTimeEndedEvent?.Invoke(this);
+            OnLifeTimeEnded?.Invoke(this);
         }
         
         public void SetVelocity(float velocity)
