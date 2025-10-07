@@ -13,7 +13,7 @@
       "CircleSize": 0.5,
       "Radius": 1.3,
       "StartAngleDeg": 0.0,
-      "StartSpeed": 180.0,
+      "StartSpeed": 4.0,
       "StartDirection": 1.0
     },
     "Enemy": {

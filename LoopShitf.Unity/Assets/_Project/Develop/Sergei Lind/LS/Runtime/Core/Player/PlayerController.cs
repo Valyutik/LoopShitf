@@ -87,7 +87,7 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
         private void UpdatePosition()
         {
             if (!_canMove) return;
-            var position = _playerMovement.Tick(Time.fixedDeltaTime);
+            var position = _playerMovement.Tick();
             _playerView.MoveTo(position);
         }
         

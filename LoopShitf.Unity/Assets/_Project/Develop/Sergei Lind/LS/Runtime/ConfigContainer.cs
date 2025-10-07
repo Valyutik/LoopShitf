@@ -37,7 +37,7 @@ namespace Sergei_Lind.LS.Runtime
         public float CircleSize = 0.5f;
         public float Radius = 1.3f;
         public float StartAngleDeg;
-        public float StartSpeed = 180f;
+        public float StartSpeed = 4f;
         public float StartDirection = 1f;
         public int Health = 1;
     }

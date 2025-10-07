@@ -26,9 +26,9 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
             _startAngleDeg = startAngleDeg;
         }
 
-        public Vector2 Tick(float deltaTime)
+        public Vector2 Tick()
         {
-            var deltaAngle = _speed * deltaTime * _direction;
+            var deltaAngle = _speed * _direction;
             _currentAngleDeg += deltaAngle;
             if (_currentAngleDeg >= 360f) _currentAngleDeg -= 360f;
             if (_currentAngleDeg < 0f) _currentAngleDeg += 360f;
