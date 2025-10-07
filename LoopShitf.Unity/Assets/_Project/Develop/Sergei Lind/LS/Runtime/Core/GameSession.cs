@@ -1,6 +1,7 @@
 ﻿using Sergei_Lind.LS.Runtime.Core.Player;
 using Sergei_Lind.LS.Runtime.Core.Enemy;
 using Sergei_Lind.LS.Runtime.Utilities;
+using Sergei_Lind.LS.Runtime.Core.UI;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using System;
@@ -12,19 +13,24 @@ namespace Sergei_Lind.LS.Runtime.Core
     {
         private readonly PlayerController _playerController;
         private readonly EnemySpawner _enemySpawner;
+        private readonly GameUIController _gameUIController;
 
-        public GameSession(PlayerController playerController, EnemySpawner enemySpawner)
+        public GameSession(PlayerController playerController,
+            EnemySpawner enemySpawner,
+            GameUIController gameUIController)
         {
             _playerController = playerController;
             _enemySpawner = enemySpawner;
+            _gameUIController = gameUIController;
         }
 
         public UniTask Load()
         {
             _playerController.OnPlayerDead += HandleGameOver;
+            _gameUIController.OnRestartClicked += HandleRestart;
             return UniTask.CompletedTask;
         }
-        
+
         public void Dispose()
         {
             _playerController.OnPlayerDead -= HandleGameOver;
@@ -32,7 +38,6 @@ namespace Sergei_Lind.LS.Runtime.Core
 
         public void Start()
         {
-            
             _playerController.Start();
             _enemySpawner.Start();
         }
@@ -41,6 +46,17 @@ namespace Sergei_Lind.LS.Runtime.Core
         {
             _playerController.DisableMovement();
             _enemySpawner.Stop();
+            _gameUIController.ShowGameOver();
+        }
+        
+        private void HandleRestart()
+        {
+            _gameUIController.HideGameOver();
+
+            _enemySpawner.ClearEnemies();
+            _playerController.Reset();
+
+            Start();
         }
     }
 }

@@ -63,6 +63,15 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
                 enemy.Stop();
         }
 
+        public void ClearEnemies()
+        {
+            foreach (var enemy in _activeEnemies)
+            {
+                _enemyFactory.Destroy(enemy);
+            }
+            _activeEnemies.Clear();
+        }
+
         private void SpawnEnemy()
         {
             var angleRad = Random.Range(0f, 2 * Mathf.PI);

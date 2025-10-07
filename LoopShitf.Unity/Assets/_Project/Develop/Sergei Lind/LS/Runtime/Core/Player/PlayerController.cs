@@ -81,6 +81,8 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
         
         public void EnableMovement() => _canMove = true;
         public void DisableMovement() => _canMove = false;
+
+        public void Reset() => _playerMovement.ResetPosition();
         
         private void UpdatePosition()
         {
