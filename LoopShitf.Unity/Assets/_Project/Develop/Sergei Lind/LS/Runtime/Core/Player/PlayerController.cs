@@ -1,11 +1,12 @@
-﻿using Sergei_Lind.LS.Runtime.Utilities.Logging;
+﻿using Sergei_Lind.LS.Runtime.Core.Enemy;
 using Sergei_Lind.LS.Runtime.Utilities;
 using Sergei_Lind.LS.Runtime.Input;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using VContainer.Unity;
-using UnityEngine;
+using UniRx.Triggers;
 using System;
+using UniRx;
 using Object = UnityEngine.Object;
 
 namespace Sergei_Lind.LS.Runtime.Core.Player
@@ -22,6 +23,7 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
         private readonly IInput _input;
         private PlayerView _playerView;
         
+        private readonly CompositeDisposable _disposables = new();
         private bool _canMove;
 
         public PlayerController(PlayerViewFactory playerViewFactory,
@@ -46,8 +48,11 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
             _playerView = _playerViewFactory.CreatePlayerView();
 
             _input.OnTap += HandleTap;
-            _health.OnDead += HandlePlayerDead;
-            _playerView.OnEnemyTriggerEnter += HandleEnemyTriggerEnter;
+            _health.IsDead.Where(dead => dead).Subscribe(_ => OnPlayerDead?.Invoke()).AddTo(_disposables);
+            _playerView.OnTriggerEnter2DAsObservable()
+                .Where(other => other.GetComponent<EnemyView>() != null)
+                .Subscribe(_ => _health.TakeDamage(_configContainer.Core.Enemy.Damage))
+                .AddTo(_disposables);
             
             return UniTask.CompletedTask;
         }
@@ -59,9 +64,8 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
 
         public void Dispose()
         {
+            _disposables.Dispose();
             _input.OnTap -= HandleTap;
-            _health.OnDead -= HandlePlayerDead;
-            _playerView.OnEnemyTriggerEnter -= HandleEnemyTriggerEnter;
             
             if (_playerView != null)
                 Object.Destroy(_playerView);
@@ -82,7 +86,11 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
         public void EnableMovement() => _canMove = true;
         public void DisableMovement() => _canMove = false;
 
-        public void Reset() => _playerMovement.ResetPosition();
+        public void Reset()
+        {
+            _playerMovement.ResetPosition();
+            _health.Reset();
+        }
         
         private void UpdatePosition()
         {
@@ -94,17 +102,6 @@ namespace Sergei_Lind.LS.Runtime.Core.Player
         private void HandleTap()
         {
             _playerMovement.ToggleDirection();
-        }
-
-        private void HandlePlayerDead()
-        {
-            Log.Core.D("Player Dead");
-            OnPlayerDead?.Invoke();
-        }
-        
-        private void HandleEnemyTriggerEnter()
-        {
-            _health.TakeDamage(_configContainer.Core.Enemy.Damage);
         }
     }
 }
