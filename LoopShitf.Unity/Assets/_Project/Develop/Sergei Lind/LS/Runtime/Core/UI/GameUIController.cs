@@ -11,6 +11,7 @@ namespace Sergei_Lind.LS.Runtime.Core.UI
         public event Action OnRestartClicked;
         
         private readonly GameOverPanelView _gameOverPanel;
+        private GameOverPanelAnimator _gameOverPanelAnimator;
 
         public GameUIController(GameOverPanelView gameOverPanel)
         {
@@ -19,6 +20,7 @@ namespace Sergei_Lind.LS.Runtime.Core.UI
         
         public UniTask Load()
         {
+            _gameOverPanelAnimator = new GameOverPanelAnimator(_gameOverPanel.PanelTransform);
             _gameOverPanel.OnRestartClicked += HandleRestartClicked;
             return UniTask.CompletedTask;
         }
@@ -28,15 +30,9 @@ namespace Sergei_Lind.LS.Runtime.Core.UI
             _gameOverPanel.OnRestartClicked -= HandleRestartClicked;
         }
 
-        public void ShowGameOver()
-        {
-            _gameOverPanel.Show();
-        }
-        
-        public void HideGameOver()
-        {
-            _gameOverPanel.Hide();
-        }
+        public void ShowGameOver() => _gameOverPanelAnimator.Show();
+
+        public void HideGameOver() => _gameOverPanelAnimator.Hide();
         
         private void HandleRestartClicked()
         {

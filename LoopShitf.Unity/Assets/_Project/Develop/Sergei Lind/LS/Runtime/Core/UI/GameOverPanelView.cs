@@ -4,19 +4,17 @@ using System;
 
 namespace Sergei_Lind.LS.Runtime.Core.UI
 {
-    [RequireComponent(typeof(CanvasGroup))]
+    [RequireComponent(typeof(CanvasGroup), typeof(RectTransform))]
     public sealed class GameOverPanelView : MonoBehaviour
     {
         public event Action OnRestartClicked;
-        
+        public RectTransform PanelTransform { get; private set; }
+
         [SerializeField] private Button restartButton;
         
-        private CanvasGroup _canvasGroup;
-        
-        private void Start()
+        private void Awake()
         {
-            _canvasGroup = GetComponent<CanvasGroup>();
-            Hide();
+            PanelTransform = GetComponent<RectTransform>();
         }
 
         private void OnEnable()
@@ -27,20 +25,6 @@ namespace Sergei_Lind.LS.Runtime.Core.UI
         private void OnDisable()
         { 
             restartButton.onClick.RemoveListener(HandleRestartClicked);
-        }
-
-        public void Show()
-        {
-            _canvasGroup.alpha = 1f;
-            _canvasGroup.interactable = true;
-            _canvasGroup.blocksRaycasts = true;
-        }
-
-        public void Hide()
-        {
-            _canvasGroup.alpha = 0f;
-            _canvasGroup.interactable = false;
-            _canvasGroup.blocksRaycasts = false;
         }
         
         private void HandleRestartClicked()
