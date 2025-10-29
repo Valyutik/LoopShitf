@@ -6,6 +6,7 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
     [RequireComponent(typeof(Rigidbody2D))]
     public sealed class EnemyView : MonoBehaviour
     {
+        public float Timer => _lifeTimer;
         public event Action<EnemyView> OnLifeTimeEnded;
         
         private Rigidbody2D _rigidbody2D;
@@ -28,12 +29,6 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
             SetVelocity(velocity);
         }
 
-        private void OnEnable()
-        {
-            _lifeTimer = 0;
-            _isActive = true;
-        }
-
         private void Update()
         {
             if (!_isActive) return;
@@ -43,25 +38,34 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
             OnLifeTimeEnded?.Invoke(this);
         }
         
-        public void SetVelocity(float velocity)
+        public void Stop()
+        {
+            _isActive = false;
+            SetVelocity(0);
+        }
+
+        public void Resume()
+        {
+            _isActive = true;
+            SetVelocity(_cachedVelocity);
+            gameObject.SetActive(true);
+        }
+
+        public void Reset()
+        {
+            SetVelocity(0);
+            _isActive = false;
+            _lifeTimer = 0;
+            gameObject.SetActive(false);
+        }
+        
+        private void SetVelocity(float velocity)
         {
             _cachedVelocity = velocity;
             if (_isActive)
                 _rigidbody2D.linearVelocityX = velocity;
             else
                 _rigidbody2D.linearVelocityX = 0;
-        }
-        
-        public void Stop()
-        {
-            _isActive = false;
-            _rigidbody2D.linearVelocity = Vector2.zero;
-        }
-
-        public void Resume()
-        {
-            _isActive = true;
-            _rigidbody2D.linearVelocityX = _cachedVelocity;
         }
     }
 }

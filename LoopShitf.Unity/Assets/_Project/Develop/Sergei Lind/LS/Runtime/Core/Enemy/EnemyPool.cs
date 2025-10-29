@@ -17,7 +17,6 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
             for (var i = 0; i < initialCount; i++)
             {
                 var enemy = CreateView();
-                enemy.gameObject.SetActive(false);
                 _pool.Enqueue(enemy);
             }
         }
@@ -26,16 +25,10 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
         {
             EnemyView enemy;
 
-            if (_pool.Count > 0)
-            {
-                enemy = _pool.Dequeue();
-                enemy.gameObject.SetActive(true);
-            }
-            else
-            {
-                enemy = CreateView();
-            }
-            
+            enemy = _pool.Count > 0 ? _pool.Dequeue() : CreateView();
+
+            enemy.Resume();
+
             enemy.transform.position = position;
             return enemy;
         }
@@ -43,14 +36,14 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
         public void Return(EnemyView enemy)
         {
             if (enemy == null) return;
-            enemy.gameObject.SetActive(false);
-            enemy.SetVelocity(0);
+            enemy.Reset();
             _pool.Enqueue(enemy);
         }
         
         private EnemyView CreateView()
         {
             var enemy = Object.Instantiate(_prefab, _parent);
+            enemy.Reset();
             return enemy;
         }
     }

@@ -51,6 +51,7 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
         
         public void Start()
         {
+            _timer = 0;
             _isActive = true;
             foreach (var enemy in _activeEnemies)
                 enemy.Resume();
@@ -61,15 +62,6 @@ namespace Sergei_Lind.LS.Runtime.Core.Enemy
             _isActive = false;
             foreach (var enemy in _activeEnemies)
                 enemy.Stop();
-        }
-
-        public void ClearEnemies()
-        {
-            foreach (var enemy in _activeEnemies)
-            {
-                _enemyFactory.Destroy(enemy);
-            }
-            _activeEnemies.Clear();
         }
 
         private void SpawnEnemy()

@@ -52,8 +52,7 @@ namespace Sergei_Lind.LS.Runtime.Core
         private void HandleRestart()
         {
             _gameUIController.HideGameOver();
-
-            _enemySpawner.ClearEnemies();
+            _enemySpawner.Dispose();
             _playerController.Reset();
 
             Start();
